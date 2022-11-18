@@ -227,12 +227,12 @@ class Scene2 extends Phaser.Scene{ //Here!!
         } else if (this.cursorKeys.right.isDown){
             this.player.setVelocityX(gameSettings.playerSpeed);
         }
-
+        /*
         if(this.cursorKeys.up.isDown){
             this.player.setVelocityY(-gameSettings.playerSpeed);
         } else if (this.cursorKeys.down.isDown){
             this.player.setVelocityY(gameSettings.playerSpeed);
-        }
+        } */
 
     }
 
