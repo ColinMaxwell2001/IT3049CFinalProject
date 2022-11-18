@@ -15,7 +15,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.ship1 = this.add.sprite(config.width / 2 - 50, config.height / 2, "ship");
         this.ship2 = this.add.sprite(config.width / 2, config.height / 2, "ship2");
         this.ship3 = this.add.sprite(config.width / 2 + 50, config.height / 2, "ship3");
-
+/*
         this.anima.create({
             key:"ship1_anim",
             frames:this.anims.generateFrameNumbers("ship"),
@@ -44,7 +44,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
             repeat:0,
             hideOnComplete:true
         });
-
+*/
         this.enemies = this.physics.add.group();
         this.enemies.add(this.ship1);
         this.enemies.add(this.ship2);
