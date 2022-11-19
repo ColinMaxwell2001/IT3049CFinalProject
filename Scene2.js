@@ -3,6 +3,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
         super("playGame");
     }
 
+
+
     create(){
         //this.background = this.add.image(0, 0,"background");
         this.background = this.add.tileSprite(0, 0, config.width, config.height, "background");
@@ -12,9 +14,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
         //this.ship2 = this.add.image(config.width/2, config.height/2, "ship2");
         //this.ship3 = this.add.image(config.width/2 +50, config.height/2, "ship3");
 
-        this.ship1 = this.add.sprite(config.width / 2 - 50, config.height / 2, "ship");
-        this.ship2 = this.add.sprite(config.width / 2, config.height / 2, "ship2");
-        this.ship3 = this.add.sprite(config.width / 2 + 50, config.height / 2, "ship3");
+        // this.ship1 = this.add.sprite(config.width / 2 - 50, config.height / 2, "ship");
+        // this.ship2 = this.add.sprite(config.width / 2, config.height / 2, "ship2");
+        // this.ship3 = this.add.sprite(config.width / 2 + 50, config.height / 2, "ship3");
 /*
         this.anima.create({
             key:"ship1_anim",
@@ -46,19 +48,32 @@ class Scene2 extends Phaser.Scene{ //Here!!
         });
 */
         this.enemies = this.physics.add.group();
-        this.enemies.add(this.ship1);
-        this.enemies.add(this.ship2);
-        this.enemies.add(this.ship3);
+        // this.enemies.add(this.ship1);
+        // this.enemies.add(this.ship2);
+        // this.enemies.add(this.ship3);
 
-        
 
-        this.ship1.play("ship1_anim");
-        this.ship2.play("ship2_anim");
-        this.ship3.play("ship3_anim");
+        this.shipsArr = [];
+        this.startingPosition = 0;
+        for(let i = 0; i < 11; i++){
+            
+            this.shipsArr.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2, "ship"));
+            this.startingPosition += 40
+        }
 
-        this.ship1.setInteractive();
-        this.ship2.setInteractive();
-        this.ship3.setInteractive();
+        this.shipsArr.forEach(element => {
+            element.play("ship1_anim");
+            element.setInteractive();
+            this.enemies.add(element);
+        });
+
+        // this.ship1.play("ship1_anim");
+        // this.ship2.play("ship2_anim");
+        // this.ship3.play("ship3_anim");
+
+        // this.ship1.setInteractive();
+        // this.ship2.setInteractive();
+        // this.ship3.setInteractive();
 
         this.input.on('gameobjectdown', this.destroyShip, this);
 
@@ -186,8 +201,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
     }
 
     moveShip(ship, speed) {
-        ship.y += speed;
-        if (ship.y > config.height)
+        ship.x += speed;
+        if (ship.x > config.width - 100)
         {
             this.resetShipPos(ship);
         }
@@ -195,9 +210,14 @@ class Scene2 extends Phaser.Scene{ //Here!!
     }
 
     update() {
-        this.moveShip(this.ship1, 1);
-        this.moveShip(this.ship2, 2);
-        this.moveShip(this.ship3, 3);
+        // this.moveShip(this.ship1, .5);
+        // this.moveShip(this.ship2, .5);
+        // this.moveShip(this.ship3, .5);
+        
+
+        this.shipsArr.forEach(element => {
+            this.moveShip(element,.1);
+        });
 
         this.background.tilePositionY -= 0.5;
 
