@@ -51,21 +51,41 @@ class Scene2 extends Phaser.Scene{ //Here!!
         // this.enemies.add(this.ship1);
         // this.enemies.add(this.ship2);
         // this.enemies.add(this.ship3);
+        this.shipDirection = true;
 
-
-        this.shipsArr = [];
+        this.shipsArr1 = [];
+        this.shipsArr2 = [];
+        this.shipsArr3 = [];
         this.startingPosition = 0;
-        for(let i = 0; i < 11; i++){
-            
-            this.shipsArr.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2, "ship"));
-            this.startingPosition += 40
-        }
 
-        this.shipsArr.forEach(element => {
+
+        //creating ships
+        for(let i = 0; i < 11; i++){
+            this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 4, "ship"));
+            this.shipsArr2.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3, "ship2"));
+            this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
+            this.startingPosition += 40;
+        }
+        
+        //setting their properties
+
+
+        this.shipsArr1.forEach(element => {
             element.play("ship1_anim");
             element.setInteractive();
             this.enemies.add(element);
         });
+        this.shipsArr2.forEach(element => {
+            element.play("ship2_anim");
+            element.setInteractive();
+            this.enemies.add(element);
+        })
+        this.shipsArr3.forEach(element => {
+            element.play("ship3_anim");
+            element.setInteractive();
+            this.enemies.add(element);
+        })
+
 
         // this.ship1.play("ship1_anim");
         // this.ship2.play("ship2_anim");
@@ -199,24 +219,65 @@ class Scene2 extends Phaser.Scene{ //Here!!
         var scoreFormated = this.zeroPad(this.score, 6);
         this.scoreLabel.text = "SCORE " + scoreFormated;
     }
-
     moveShip(ship, speed) {
-        ship.x += speed;
-        if (ship.x > config.width - 100)
+        if(this.shipDirection){
+            ship.x += speed;
+        }
+        else{
+            ship.x -= speed;
+        }
+
+
+        if ((ship.x > (config.width - 100)) && this.shipDirection)
         {
-            this.resetShipPos(ship);
+            //this.resetShipPos(ship);
+            this.reverseShipMovement();
+            this.shipDirection = false; 
+        }
+        else if(ship.x < (100) && !this.shipDirection){
+            this.shipDirection = true;
         }
 
     }
+
+    reverseShipMovement(){
+        this.shipsArr1.forEach(element => {
+            this.moveShip(element,-.5);
+        });
+    }
+
+    moveShip1(){
+        this.shipsArr1.forEach(element => {
+            this.moveShip(element,.5);
+        });
+    }
+    
+    moveShip2(){
+        this.shipsArr2.forEach(element => {
+            this.moveShip(element,.5);
+        });
+    }
+    
+    moveShip3(){
+        this.shipsArr3.forEach(element => {
+            this.moveShip(element,.5);
+        });
+    }
+
 
     update() {
         // this.moveShip(this.ship1, .5);
         // this.moveShip(this.ship2, .5);
         // this.moveShip(this.ship3, .5);
-        
 
-        this.shipsArr.forEach(element => {
-            this.moveShip(element,.1);
+        this.shipsArr1.forEach(element => {
+            this.moveShip(element,.5);
+        });
+        this.shipsArr2.forEach(element => {
+            this.moveShip(element,.5);
+        });
+        this.shipsArr3.forEach(element => {
+            this.moveShip(element,.5);
         });
 
         this.background.tilePositionY -= 0.5;
