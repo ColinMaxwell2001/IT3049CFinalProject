@@ -72,17 +72,14 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         this.shipsArr1.forEach(element => {
             element.play("ship1_anim");
-            element.setInteractive();
             this.enemies.add(element);
         });
         this.shipsArr2.forEach(element => {
             element.play("ship2_anim");
-            element.setInteractive();
             this.enemies.add(element);
         })
         this.shipsArr3.forEach(element => {
             element.play("ship3_anim");
-            element.setInteractive();
             this.enemies.add(element);
         })
 
@@ -307,6 +304,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
             this.player.setVelocityX(-gameSettings.playerSpeed);
         } else if (this.cursorKeys.right.isDown){
             this.player.setVelocityX(gameSettings.playerSpeed);
+        }
+        else{
+            this.player.setVelocity(0);
         }
         /*
         if(this.cursorKeys.up.isDown){
