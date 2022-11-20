@@ -10,8 +10,6 @@ class Scene1 extends Phaser.Scene {
         //this.load.image("ship3", "assets/images/ship3.png");
         //this.load.image("colors", "assets/colors.png");
 
-
-        //test2
         this.load.spritesheet("ship", "assets/images/spritesheets/ship.png", {
             frameWidth: 16,
             frameHeight: 16
