@@ -9,7 +9,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
         //this.background = this.add.image(0, 0,"background");
         this.background = this.add.tileSprite(0, 0, config.width, config.height, "background");
         this.background.setOrigin(0,0);
-
+        this.velocity = 1
+        this.playerDied = false;
         //this.ship1 = this.add.image(config.width/2 -50, config.height/2, "ship");
         //this.ship2 = this.add.image(config.width/2, config.height/2, "ship2");
         //this.ship3 = this.add.image(config.width/2 +50, config.height/2, "ship3");
@@ -52,12 +53,11 @@ class Scene2 extends Phaser.Scene{ //Here!!
         // this.enemies.add(this.ship2);
         // this.enemies.add(this.ship3);
         this.shipDirection = true;
-
+        this.deadShipCount = 0;
         this.shipsArr1 = [];
         this.shipsArr2 = [];
         this.shipsArr3 = [];
         this.startingPosition = 0;
-
 
         //creating ships
         for(let i = 0; i < 11; i++){
@@ -167,7 +167,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     hurtPlayer(player, enemy) {
         this.resetShipPos(enemy);
-
+        this.playerDied = true;
         if(this.player.alpha < 1) {
             return;
         }
@@ -211,55 +211,120 @@ class Scene2 extends Phaser.Scene{ //Here!!
         var explosion = new Explosion(this, enemy.x, enemy.y);
 
         projectile.destroy();
-        this.resetShipPos(enemy);
+        this.resetShipPos(enemy, enemy.x);
         this.score += 15;
         var scoreFormated = this.zeroPad(this.score, 6);
         this.scoreLabel.text = "SCORE " + scoreFormated;
     }
-    moveShip(ship, speed) {
+    // moveShip(ship, speed) {
+    //     if(this.shipDirection){
+    //         ship.x += speed;
+    //     }
+    //     else{
+    //         ship.x -= speed;
+    //     }
+
+
+    //     if ((ship.x > (config.width - 100)) && this.shipDirection)
+    //     {
+    //         //this.resetShipPos(ship);
+    //         this.reverseShipMovement();
+    //         this.shipDirection = false; 
+    //     }
+    //     else if(ship.x < (100) && !this.shipDirection){
+    //         this.shipDirection = true;
+    //     }
+
+    // }
+
+
+    
+
+    // reverseShipMovement(){
+    //     this.shipsArr1.forEach(element => {
+    //         this.moveShip(element,-.5);
+    //     });
+    //     this.shipsArr2.forEach(element=>{
+    //         this.moveShip(element,-.5);
+    //     })
+    //     this.shipsArr3.forEach(element=>{
+    //         this.moveShip(element,-.5);
+    //     });
+    // }
+
+
+
+
+    moveAllShips(speed){
+        // console.log(this.shipsArr1[0].x)
+        // console.log(this.shipsArr1[0].y);
+        console.log(this.velocity)
         if(this.shipDirection){
-            ship.x += speed;
+        
+        for(let i = 0; i < this.shipsArr1.length; i++){
+            this.shipsArr1[i].x += (speed * this.velocity);
+            this.shipsArr2[i].x += (speed * this.velocity);
+            this.shipsArr3[i].x += (speed * this.velocity);
+        }
+       
+        if(this.shipsArr1[0].x >= 800){
+            for(let i = 0; i < this.shipsArr1.length; i++){
+                this.shipsArr1[i].y += 10;
+                this.shipsArr2[i].y += 10;
+                this.shipsArr3[i].y += 10;
+
+            }
+            this.velocity += .2;
+            this.shipDirection = false;
+            
+        }
         }
         else{
-            ship.x -= speed;
-        }
-
-
-        if ((ship.x > (config.width - 100)) && this.shipDirection)
-        {
-            //this.resetShipPos(ship);
-            this.reverseShipMovement();
-            this.shipDirection = false; 
-        }
-        else if(ship.x < (100) && !this.shipDirection){
-            this.shipDirection = true;
-        }
-
-    }
-
-    reverseShipMovement(){
-        this.shipsArr1.forEach(element => {
-            this.moveShip(element,-.5);
-        });
-    }
-
-    moveShip1(){
-        this.shipsArr1.forEach(element => {
-            this.moveShip(element,.5);
-        });
-    }
+            for(let i = 0; i < this.shipsArr1.length; i++){
+                this.shipsArr1[i].x -= speed * this.velocity;
+                this.shipsArr2[i].x -= speed * this.velocity;
+                this.shipsArr3[i].x -= speed * this.velocity;
+            }
+            if(this.shipsArr1[10].x <= 100){
+                for(let i = 0; i < this.shipsArr1.length; i++){
+                    this.shipsArr1[i].y += 10;
+                    this.shipsArr2[i].y += 10;
+                    this.shipsArr3[i].y += 10;
     
-    moveShip2(){
-        this.shipsArr2.forEach(element => {
-            this.moveShip(element,.5);
-        });
+                }
+                this.velocity += .2
+                this.shipDirection = true;
+                
+            }
+        }
+        
+        // console.log(this.shipsArr1[0] >= config.width)
+        // console.log(this.shipDirection)
+       
+        // if(shipArr[0] < 100){
+        //     shipArr.forEach(ship => {
+        //         ship.x += speed;
+        //     })
+        // }
     }
+
+    // moveShip1(){
+    //     this.shipsArr1.forEach(element => {
+    //         this.moveShip(element,.5);
+    //     });
+    // }
     
-    moveShip3(){
-        this.shipsArr3.forEach(element => {
-            this.moveShip(element,.5);
-        });
-    }
+    // moveShip2(){
+    //     this.shipsArr2.forEach(element => {
+    //         this.moveShip(element,.5);
+    //     });
+    // }
+    
+    // moveShip3(){
+    //     this.shipsArr3.forEach(element => {
+    //         this.moveShip(element,.5);
+    //     });
+    // }
 
 
     update() {
@@ -267,15 +332,22 @@ class Scene2 extends Phaser.Scene{ //Here!!
         // this.moveShip(this.ship2, .5);
         // this.moveShip(this.ship3, .5);
 
-        this.shipsArr1.forEach(element => {
-            this.moveShip(element,.5);
-        });
-        this.shipsArr2.forEach(element => {
-            this.moveShip(element,.5);
-        });
-        this.shipsArr3.forEach(element => {
-            this.moveShip(element,.5);
-        });
+        // this.shipsArr1.forEach(element => {
+        //     this.moveShip(element,.5);
+        // });
+        // this.shipsArr2.forEach(element => {
+        //     this.moveShip(element,.5);
+        // });
+        // this.shipsArr3.forEach(element => {
+        //     this.moveShip(element,.5);
+        // });
+        if(this.deadShipCount < 33 && !this.playerDied){
+            this.moveAllShips(.3);
+        }
+        else{
+            console.log("Game Over")
+        }
+
 
         this.background.tilePositionY -= 0.5;
 
@@ -295,7 +367,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
     }
     shootBeam(){
        // var beam = this.physics.add.sprite(this.player.x, this.player.y, "beam");
+       
         var beam = new Beam(this);
+       
+        //var beam = new Beam(this);
     }
 
 
@@ -317,12 +392,13 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     }
 
-    
 
-    resetShipPos(ship){
-        ship.y = 0;
-        var randomX = Phaser.Math.Between(0, config.width);
-        ship.x = randomX;
+
+    resetShipPos(ship, shipX){
+        this.deadShipCount++;
+        ship.y = -500;
+        ship.x = shipX;
+        console.log(this.deadShipCount)
     }
 
     destroyShip(pointer, gameObject) {
