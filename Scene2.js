@@ -344,6 +344,12 @@ class Scene2 extends Phaser.Scene{ //Here!!
         if(this.deadShipCount < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
+        else if(this.deadShipCount == 33 && !this.playerDied) {
+            //increment level
+            //respwan enemy ships
+            //increase enemy fire rate
+            //increase enemy speed
+        }
         else{
             console.log("Game Over")
         }
