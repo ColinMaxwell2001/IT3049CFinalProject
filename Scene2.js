@@ -148,8 +148,13 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
         this.score = 0;
-
+        this.level = 0;
         this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE ", 16);
+
+        var leelFormatted = this.zeroPad(this.level, 2);
+        this.levelLabel = this.add.bitmapText(300, 5, "pixelFont", "Level ", 16);
+        this.levelLabel.text = "Level " + this.level;
+
 
     }
 
@@ -308,42 +313,69 @@ class Scene2 extends Phaser.Scene{ //Here!!
         // }
     }
 
-    // moveShip1(){
-    //     this.shipsArr1.forEach(element => {
-    //         this.moveShip(element,.5);
-    //     });
-    // }
-    
-    // moveShip2(){
-    //     this.shipsArr2.forEach(element => {
-    //         this.moveShip(element,.5);
-    //     });
-    // }
-    
-    // moveShip3(){
-    //     this.shipsArr3.forEach(element => {
-    //         this.moveShip(element,.5);
-    //     });
-    // }
+   
 
 
     update() {
-        // this.moveShip(this.ship1, .5);
-        // this.moveShip(this.ship2, .5);
-        // this.moveShip(this.ship3, .5);
-
-        // this.shipsArr1.forEach(element => {
-        //     this.moveShip(element,.5);
-        // });
-        // this.shipsArr2.forEach(element => {
-        //     this.moveShip(element,.5);
-        // });
-        // this.shipsArr3.forEach(element => {
-        //     this.moveShip(element,.5);
-        // });
+       
         if(this.deadShipCount < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
+        else if(this.deadShipCount == 33 && !this.playerDied) {
+            //increment level
+            this.level++;
+            this.levelLabel.text = "Level " + this.level;
+
+            //increase enemy fire rate
+            //increase enemy speed
+            this.velocity = this.velocity + 1.2;
+
+            //reset deadShipCount
+            this.deadShipCount = 0;
+                    
+            //respwan enemy ships
+            this.enemies = this.physics.add.group();
+
+            this.shipDirection = true;
+            this.deadShipCount = 0;
+            this.shipsArr1 = [];
+            this.shipsArr2 = [];
+            this.shipsArr3 = [];
+            this.startingPosition = 0;
+    
+
+
+            for(let i = 0; i < 11; i++){
+                this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 4, "ship"));
+                this.shipsArr2.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3, "ship2"));
+                this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
+                this.startingPosition += 40;
+            }
+        
+            //setting their properties
+            this.shipsArr1.forEach(element => {
+                element.play("ship1_anim");
+                this.enemies.add(element);
+            });
+            this.shipsArr2.forEach(element => {
+                element.play("ship2_anim");
+                this.enemies.add(element);
+            })
+            this.shipsArr3.forEach(element => {
+                element.play("ship3_anim");
+                this.enemies.add(element);
+            })
+
+            this.input.on('gameobjectdown', this.destroyShip, this);
+
+            this.physics.add.overlap(this.player, this.powerUps, this.pickPowerUp, null, this);
+
+            this.physics.add.overlap(this.player, this.enemies, this.hurtPlayer, null, this);
+
+            this.physics.add.overlap(this.projectiles, this.enemies, this.hitEnemy, null, this);
+
+
+        } //end level if()
         else{
             console.log("Game Over")
         }
