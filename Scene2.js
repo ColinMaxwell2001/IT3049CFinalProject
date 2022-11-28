@@ -313,56 +313,29 @@ class Scene2 extends Phaser.Scene{ //Here!!
         // }
     }
 
-    // moveShip1(){
-    //     this.shipsArr1.forEach(element => {
-    //         this.moveShip(element,.5);
-    //     });
-    // }
-    
-    // moveShip2(){
-    //     this.shipsArr2.forEach(element => {
-    //         this.moveShip(element,.5);
-    //     });
-    // }
-    
-    // moveShip3(){
-    //     this.shipsArr3.forEach(element => {
-    //         this.moveShip(element,.5);
-    //     });
-    // }
+   
 
 
     update() {
-        // this.moveShip(this.ship1, .5);
-        // this.moveShip(this.ship2, .5);
-        // this.moveShip(this.ship3, .5);
-
-        // this.shipsArr1.forEach(element => {
-        //     this.moveShip(element,.5);
-        // });
-        // this.shipsArr2.forEach(element => {
-        //     this.moveShip(element,.5);
-        // });
-        // this.shipsArr3.forEach(element => {
-        //     this.moveShip(element,.5);
-        // });
+       
         if(this.deadShipCount < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
         else if(this.deadShipCount == 33 && !this.playerDied) {
             //increment level
-            //respwan enemy ships
-            //increase enemy fire rate
-            //increase enemy speed
-            //creating ships
             this.level++;
             this.levelLabel.text = "Level " + this.level;
 
+            //increase enemy fire rate
+            //increase enemy speed
+            this.velocity = this.velocity + 1.2;
+
+            //reset deadShipCount
             this.deadShipCount = 0;
+                    
+            //respwan enemy ships
             this.enemies = this.physics.add.group();
-            // this.enemies.add(this.ship1);
-            // this.enemies.add(this.ship2);
-            // this.enemies.add(this.ship3);
+
             this.shipDirection = true;
             this.deadShipCount = 0;
             this.shipsArr1 = [];
@@ -372,36 +345,34 @@ class Scene2 extends Phaser.Scene{ //Here!!
     
 
 
-        for(let i = 0; i < 11; i++){
-            this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 4, "ship"));
-            this.shipsArr2.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3, "ship2"));
-            this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
-            this.startingPosition += 40;
-        }
+            for(let i = 0; i < 11; i++){
+                this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 4, "ship"));
+                this.shipsArr2.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3, "ship2"));
+                this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
+                this.startingPosition += 40;
+            }
         
-        //setting their properties
+            //setting their properties
+            this.shipsArr1.forEach(element => {
+                element.play("ship1_anim");
+                this.enemies.add(element);
+            });
+            this.shipsArr2.forEach(element => {
+                element.play("ship2_anim");
+                this.enemies.add(element);
+            })
+            this.shipsArr3.forEach(element => {
+                element.play("ship3_anim");
+                this.enemies.add(element);
+            })
 
+            this.input.on('gameobjectdown', this.destroyShip, this);
 
-        this.shipsArr1.forEach(element => {
-            element.play("ship1_anim");
-            this.enemies.add(element);
-        });
-        this.shipsArr2.forEach(element => {
-            element.play("ship2_anim");
-            this.enemies.add(element);
-        })
-        this.shipsArr3.forEach(element => {
-            element.play("ship3_anim");
-            this.enemies.add(element);
-        })
+            this.physics.add.overlap(this.player, this.powerUps, this.pickPowerUp, null, this);
 
-        this.input.on('gameobjectdown', this.destroyShip, this);
+            this.physics.add.overlap(this.player, this.enemies, this.hurtPlayer, null, this);
 
-        this.physics.add.overlap(this.player, this.powerUps, this.pickPowerUp, null, this);
-
-        this.physics.add.overlap(this.player, this.enemies, this.hurtPlayer, null, this);
-
-        this.physics.add.overlap(this.projectiles, this.enemies, this.hitEnemy, null, this);
+            this.physics.add.overlap(this.projectiles, this.enemies, this.hitEnemy, null, this);
 
 
         } //end level if()
