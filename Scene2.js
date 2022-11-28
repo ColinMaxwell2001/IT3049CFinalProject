@@ -148,8 +148,13 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
         this.score = 0;
-
+        this.level = 0;
         this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE ", 16);
+
+        var leelFormatted = this.zeroPad(this.level, 2);
+        this.levelLabel = this.add.bitmapText(300, 5, "pixelFont", "Level ", 16);
+        this.levelLabel.text = "Level " + this.level;
+
 
     }
 
@@ -350,6 +355,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
             //increase enemy fire rate
             //increase enemy speed
             //creating ships
+            this.level++;
+            this.levelLabel.text = "Level " + this.level;
 
             this.deadShipCount = 0;
             this.enemies = this.physics.add.group();
