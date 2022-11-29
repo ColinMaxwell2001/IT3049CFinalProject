@@ -148,6 +148,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
         this.score = 0;
+        this.scoreMultiplier = 15;
         this.level = 0;
         this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE ", 16);
 
@@ -166,7 +167,45 @@ class Scene2 extends Phaser.Scene{ //Here!!
         return stringNumber;
     }
 
+    
+
     pickPowerUp(player, powerUp) {
+        
+        //var randNum = Math.random();
+        this.randNum = .1;
+
+        /* Double Points */
+        if (this.randNum < .166)
+        {
+            //Sets new multiplier to 25
+            this.scoreMultiplier = 25;
+
+            //After 10 seconds, set this.scoreMultiplier back to 15
+            setTimeout(() => {
+                this.scoreMultiplier = 15;
+            }, 10000); // 10 seconds or 10,000 milliseconds
+            
+        }
+        else if (this.randNum > .166 && this.randNum < .332)
+        {
+            //Double laser
+        }
+        else if (this.randNum > .332 && this.randNum < .498)
+        {
+            //laser shoots through another ship
+        }
+        else if (this.randNum > .498 && this.randNum < .664)
+        {
+            //Rapid Fire
+        }
+        else if (this.randNum > .664 && this.randNum < .830)
+        {
+            // Temporary Shield
+        }
+        else{
+            //Bigger Laser
+        } 
+
         powerUp.disableBody(true, true);
     }
 
@@ -217,7 +256,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         projectile.destroy();
         this.resetShipPos(enemy, enemy.x);
-        this.score += 15;
+        this.score += this.scoreMultiplier;
         var scoreFormated = this.zeroPad(this.score, 6);
         this.scoreLabel.text = "SCORE " + scoreFormated;
     }
