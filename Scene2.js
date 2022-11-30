@@ -58,6 +58,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.shipsArr2 = [];
         this.shipsArr3 = [];
         this.startingPosition = 0;
+        
 
         //creating ships
         for(let i = 0; i < 11; i++){
@@ -172,7 +173,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
     pickPowerUp(player, powerUp) {
         
         //var randNum = Math.random();
-        this.randNum = .1;
+        this.randNum = .4;
 
         /* Double Points */
         if (this.randNum < .166)
@@ -192,6 +193,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
         }
         else if (this.randNum > .332 && this.randNum < .498)
         {
+            this.enemiesHit = 0;
+            this.doublePenLaser = true;
+
+                        
             //laser shoots through another ship
         }
         else if (this.randNum > .498 && this.randNum < .664)
@@ -253,9 +258,15 @@ class Scene2 extends Phaser.Scene{ //Here!!
     hitEnemy(projectile, enemy) {
 
         var explosion = new Explosion(this, enemy.x, enemy.y);
-
-        projectile.destroy();
+        if(this.enemiesHit > 0){
+            this.doublePenLaser = false;
+        }
+        if(!this.doublePenLaser){
+            projectile.destroy();
+        }
+        
         this.resetShipPos(enemy, enemy.x);
+        this.enemiesHit +=1;
         this.score += this.scoreMultiplier;
         var scoreFormated = this.zeroPad(this.score, 6);
         this.scoreLabel.text = "SCORE " + scoreFormated;
