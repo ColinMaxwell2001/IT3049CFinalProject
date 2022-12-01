@@ -11,19 +11,19 @@ class Scene1 extends Phaser.Scene {
         //this.load.image("colors", "assets/colors.png");
 
         //test
-        this.load.spritesheet("ship", "assets/images/spritesheets/ship.png", {
-            frameWidth: 16,
-            frameHeight: 16
+        this.load.spritesheet("ship", "assets/images/spritesheets/yellowship.png", {
+            frameWidth: 48,
+            frameHeight: 48
         });
 
-        this.load.spritesheet("ship2", "assets/images/spritesheets/ship2.png", {
-            frameWidth: 32,
-            frameHeight: 16
+        this.load.spritesheet("ship2", "assets/images/spritesheets/whiteship.png", {
+            frameWidth: 48,
+            frameHeight: 48
         });
 
-        this.load.spritesheet("ship3", "assets/images/spritesheets/ship3.png", {
-            frameWidth: 32,
-            frameHeight: 32
+        this.load.spritesheet("ship3", "assets/images/spritesheets/greenship.png", {
+            frameWidth: 48,
+            frameHeight: 48
         });
 
         this.load.spritesheet("explosion", "assets/images/spritesheets/explosion.png", {
@@ -57,26 +57,26 @@ class Scene1 extends Phaser.Scene {
       this.add.text(20, 20, "Loading game...");
       this.scene.start("playGame");
 
-      this.anims.create({
-        key: "ship1_anim",
-        frames: this.anims.generateFrameNumbers("ship"),
-        frameRate: 20,
-        repeat: -1
-    });
+    //   this.anims.create({
+    //     key: "ship1_anim",
+    //     frames: this.anims.generateFrameNumbers("ship"),
+    //     frameRate: 20,
+    //     repeat: -1
+    // });
 
-    this.anims.create({
-        key: "ship2_anim",
-        frames: this.anims.generateFrameNumbers("ship2"),
-        frameRate: 20,
-        repeat: -1
-    });
+    // this.anims.create({
+    //     key: "ship2_anim",
+    //     frames: this.anims.generateFrameNumbers("ship2"),
+    //     frameRate: 20,
+    //     repeat: -1
+    // });
 
-    this.anims.create({
-        key: "ship3_anim",
-        frames: this.anims.generateFrameNumbers("ship3"),
-        frameRate: 20,
-        repeat: -1
-    });
+    // this.anims.create({
+    //     key: "ship3_anim",
+    //     frames: this.anims.generateFrameNumbers("ship3"),
+    //     frameRate: 20,
+    //     repeat: -1
+    // });
 
     this.anims.create({
         key: "explode",
