@@ -62,7 +62,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         //creating ships
         for(let i = 0; i < 11; i++){
-            this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 4, "ship"));
+            this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3.8, "ship"));
             this.shipsArr2.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3, "ship2"));
             this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
             this.startingPosition += 40;
@@ -398,29 +398,6 @@ class Scene2 extends Phaser.Scene{ //Here!!
             this.shipsArr2 = [];
             this.shipsArr3 = [];
             this.startingPosition = 0;
-    
-
-
-            for(let i = 0; i < 11; i++){
-                this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 4, "ship"));
-                this.shipsArr2.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3, "ship2"));
-                this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
-                this.startingPosition += 40;
-            }
-        
-            //setting their properties
-            this.shipsArr1.forEach(element => {
-                element.play("ship1_anim");
-                this.enemies.add(element);
-            });
-            this.shipsArr2.forEach(element => {
-                element.play("ship2_anim");
-                this.enemies.add(element);
-            })
-            this.shipsArr3.forEach(element => {
-                element.play("ship3_anim");
-                this.enemies.add(element);
-            })
 
             this.input.on('gameobjectdown', this.destroyShip, this);
 
