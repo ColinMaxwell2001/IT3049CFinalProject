@@ -58,8 +58,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.shipsArr2 = [];
         this.shipsArr3 = [];
         this.startingPosition = 0;
-        
-
+    
         //creating ships
         for(let i = 0; i < 11; i++){
             this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3.8, "ship"));
