@@ -59,6 +59,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.shipsArr3 = [];
         this.startingPosition = 0;
     
+        let bonusShip = this.add.sprite(config.width - 100 , config.height - 600, "ship");
+        this.enemies.add(bonusShip);
+        
         //creating ships
         for(let i = 0; i < 11; i++){
             this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3.8, "ship"));
@@ -372,7 +375,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     update() {
-       
+        
         if(this.deadShipCount < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
@@ -391,12 +394,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
             //respwan enemy ships
             this.enemies = this.physics.add.group();
 
-            this.shipDirection = true;
-            this.deadShipCount = 0;
-            this.shipsArr1 = [];
-            this.shipsArr2 = [];
-            this.shipsArr3 = [];
-            this.startingPosition = 0;
+            
 
             this.input.on('gameobjectdown', this.destroyShip, this);
 
