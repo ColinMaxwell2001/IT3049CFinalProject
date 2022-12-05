@@ -172,7 +172,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
     pickPowerUp(player, powerUp) {
         
         //var randNum = Math.random();
-        this.randNum = .4;
+        this.randNum = .2;
 
         /* Double Points */
         if (this.randNum < .166)
@@ -189,6 +189,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
         else if (this.randNum > .166 && this.randNum < .332)
         {
             //Double laser
+            
+            
         }
         else if (this.randNum > .332 && this.randNum < .498)
         {
