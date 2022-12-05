@@ -66,7 +66,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
             this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
             this.startingPosition += 40;
         }
-        
+        this.enemy = this.add.sprite(config.width - this.startingPosition, 100, "ship")
         //setting their properties
 
 
@@ -124,6 +124,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.projectiles = this.add.group();
 
+
+        this.enemyProjectiles = this.add.group();
+
         this.physics.add.collider(this.projectiles, this.powerUps, function(projectile, powerUp) {
             projectile.destroy();
         });
@@ -172,7 +175,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
     pickPowerUp(player, powerUp) {
         
         //var randNum = Math.random();
-        this.randNum = .1;
+        this.randNum = .2;
 
         /* Double Points */
         if (this.randNum < .166)
@@ -189,6 +192,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
         else if (this.randNum > .166 && this.randNum < .332)
         {
             //Double laser
+            this.doubleshot = true;
+            setTimeout(() => {
+                this.doubleshot = false;
+            }, 5000);
             
             
         }
@@ -374,7 +381,6 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     update() {
-       
         if(this.deadShipCount < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
@@ -449,13 +455,19 @@ class Scene2 extends Phaser.Scene{ //Here!!
             console.log("Game Over")
         }
 
-        
+        this.shootEnemy();
         this.background.tilePositionY -= 0.5;
 
         this.movePlayerManager();
-
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
             if(this.player.active && !this.playerShootTime){
+                if(this.doubleshot){
+                    this.shootBeam();
+                    setTimeout(() => {
+                        this.shootBeam();
+                    }, 200);
+                    
+                }
                 this.shootBeam();
                 this.playerShootTime = true;
                 setTimeout(()=>{
@@ -488,6 +500,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
         //var beam = new Beam(this);
     }
 
+
+    shootEnemy(){
+        let newBeam = new BeamJr(this);
+    }
 
     movePlayerManager(){
         if(this.cursorKeys.left.isDown){
