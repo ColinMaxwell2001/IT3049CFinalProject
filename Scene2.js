@@ -215,10 +215,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
     pickPowerUp(player, powerUp) {
         
         //var randNum = Math.random();
-        this.randNum = .2;
-
+        this.randNum = Math.random();
+        console.log(this.randNum);
         /* Double Points */
-        if (this.randNum < .166)
+        if (this.randNum <= .25)
         {
             //Sets new multiplier to 25
             this.scoreMultiplier = 25;
@@ -229,7 +229,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
             }, 10000); // 10 seconds or 10,000 milliseconds
             
         }
-        else if (this.randNum > .166 && this.randNum < .332)
+        else if (this.randNum > .25 && this.randNum <= .5)
         {
             //Double laser
             this.doubleshot = true;
@@ -239,7 +239,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
             
             
         }
-        else if (this.randNum > .332 && this.randNum < .498)
+        else if (this.randNum > .5 && this.randNum <= .75)
         {
             this.projectilesShot = 0;
 
@@ -250,17 +250,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
                         
             //laser shoots through another ship
         }
-        else if (this.randNum > .498 && this.randNum < .664)
+        else if (this.randNum > .75 && this.randNum <= 1)
         {
             //Rapid Fire
         }
-        else if (this.randNum > .664 && this.randNum < .830)
-        {
-            // Temporary Shield
-        }
-        else{
-            //Bigger Laser
-        } 
 
         powerUp.disableBody(true, true);
     }
@@ -474,6 +467,25 @@ class Scene2 extends Phaser.Scene{ //Here!!
             element.play("ship3_anim");
             this.enemies.add(element);
         })
+        this.randNum = Math.random();
+        var maxObjects = 0;
+        for (var i = 0; i <= maxObjects; i++) {
+          var powerUp = this.physics.add.sprite(16, 16, "power-up");
+          this.powerUps.add(powerUp);
+          powerUp.setRandomPosition(0, 0, config.width, config.height);     /* Had to take out the keyword "game" in game.config in order to make work */
+
+            if (Math.random() > 0.5)
+            {
+                powerUp.play("red");
+            } else {
+                powerUp.play("gray");
+            }
+
+            powerUp.setVelocity(100, 100);
+            powerUp.setCollideWorldBounds(true);
+            powerUp.setBounce(1);
+        }
+
 
         this.input.on('gameobjectdown', this.destroyShip, this);
 
