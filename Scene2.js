@@ -3,14 +3,26 @@ class Scene2 extends Phaser.Scene{ //Here!!
         super("playGame");
     }
 
-
-
     create(){
+        
         //this.background = this.add.image(0, 0,"background");
         this.background = this.add.tileSprite(0, 0, config.width, config.height, "background");
         this.background.setOrigin(0,0);
         this.velocity = 1
         this.playerDied = false;
+        this.fullScreen = this.add.text(780, 20, 'Full Screen', { fill: '#0f0'})
+         .setInteractive()
+        .on('pointerover', () => this.enterButtonHoverState() )
+        .on('pointerout', () => this.enterButtonRestState() )
+         .on('pointerdown', () => this.enterButtonActiveState() )
+        .on('pointerup', () => {
+            if(document.fullscreenElement){
+                document.exitFullscreen();
+            }
+            
+        document.body.webkitRequestFullScreen();
+        this.enterButtonHoverState();
+    });
         //this.ship1 = this.add.image(config.width/2 -50, config.height/2, "ship");
         //this.ship2 = this.add.image(config.width/2, config.height/2, "ship2");
         //this.ship3 = this.add.image(config.width/2 +50, config.height/2, "ship3");
@@ -178,6 +190,17 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     }
+    enterButtonHoverState() {
+        this.fullScreen.setStyle({ fill: '#ff0'});
+      }
+    
+      enterButtonRestState() {
+        this.fullScreen.setStyle({ fill: '#0f0' });
+      }
+    
+      enterButtonActiveState() {
+        this.fullScreen.setStyle({ fill: '#0ff' });
+      }
 
     zeroPad(number, size){
         var stringNumber = String(number);
@@ -479,8 +502,11 @@ class Scene2 extends Phaser.Scene{ //Here!!
         } //end level if()
         else{
             clearInterval(this.shootInterval);
-            this.scene.stop();
+            setTimeout(() => {
+                this.scene.stop();
             this.scene.start("endGame");
+            }, 500);
+            
             
         }
         this.movePlayerManager();
