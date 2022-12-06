@@ -66,10 +66,17 @@ class Scene2 extends Phaser.Scene{ //Here!!
             this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
             this.startingPosition += 40;
         }
-        
+        this.enemy = this.shipsArr1[0];
+        this.chooseShip = Math.floor(Math.random() * 10);
         //setting their properties
+        setInterval(() => {
+            this.chooseShip = Math.floor(Math.random() * 10);
+            console.log(this.chooseShip)
+            this.shootEnemy();
 
+        }, 2000);
 
+        
         this.shipsArr1.forEach(element => {
             element.play("ship1_anim");
             this.enemies.add(element);
@@ -124,6 +131,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.projectiles = this.add.group();
 
+
+        this.enemyProjectiles = this.add.group();
+
         this.physics.add.collider(this.projectiles, this.powerUps, function(projectile, powerUp) {
             projectile.destroy();
         });
@@ -172,7 +182,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
     pickPowerUp(player, powerUp) {
         
         //var randNum = Math.random();
-        this.randNum = .1;
+        this.randNum = .2;
 
         /* Double Points */
         if (this.randNum < .166)
@@ -189,6 +199,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
         else if (this.randNum > .166 && this.randNum < .332)
         {
             //Double laser
+            this.doubleshot = true;
+            setTimeout(() => {
+                this.doubleshot = false;
+            }, 5000);
             
             
         }
@@ -374,7 +388,6 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     update() {
-       
         if(this.deadShipCount < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
@@ -417,7 +430,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
                     this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
                     this.startingPosition += 40;
                 }
-                
+                console.log(this.shipsArr1);
                 //setting their animations
                 this.shipsArr1.forEach(element => {
                     element.play("ship1_anim");
@@ -448,14 +461,16 @@ class Scene2 extends Phaser.Scene{ //Here!!
         else{
             console.log("Game Over")
         }
-
-        
-        this.background.tilePositionY -= 0.5;
-
         this.movePlayerManager();
-
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
             if(this.player.active && !this.playerShootTime){
+                if(this.doubleshot){
+                    this.shootBeam();
+                    setTimeout(() => {
+                        this.shootBeam();
+                    }, 200);
+                    
+                }
                 this.shootBeam();
                 this.playerShootTime = true;
                 setTimeout(()=>{
@@ -489,6 +504,13 @@ class Scene2 extends Phaser.Scene{ //Here!!
     }
 
 
+    shootEnemy(){
+
+        let newBeam = new BeamJr(this);
+        this.enemy = this.shipsArr1[this.chooseShip];
+        console.log(this.chooseShip);
+    }
+
     movePlayerManager(){
         if(this.cursorKeys.left.isDown){
             this.player.setVelocityX(-gameSettings.playerSpeed);
@@ -511,9 +533,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     resetShipPos(ship, shipX){
         this.deadShipCount++;
-        ship.y = -500;
+        ship.y = + 1000;
         ship.x = shipX;
-
+        console.log(ship.y);
     }
 
     destroyShip(pointer, gameObject) {

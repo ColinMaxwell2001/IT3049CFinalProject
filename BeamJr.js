@@ -1,8 +1,8 @@
-class Beam extends Phaser.GameObjects.Sprite {
-    constructor(scene){
+class BeamJr extends Phaser.GameObjects.Sprite {
+    constructor(scene, e){
 
-        var x = scene.player.x;
-        var y = scene.player.y - 16;
+        var x = scene.enemy.x;
+        var y = scene.enemy.y + 16;
 
 
         super(scene, x, y, "beam");
@@ -10,17 +10,17 @@ class Beam extends Phaser.GameObjects.Sprite {
  
         this.play("beam_anim");
         scene.physics.world.enableBody(this);
-        this.body.velocity.y = - 250;
+        this.body.velocity.y = + 250;
     
       
-        scene.projectiles.add(this);   
+        scene.enemyProjectiles.add(this);   
     }
 
 
     update(){
 
         // 3.4 Frustum culling
-        if(this.y < 32 ){
+        if(this.y < 650 ){
           this.destroy();
         }
       }
