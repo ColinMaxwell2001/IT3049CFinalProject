@@ -69,6 +69,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.enemy = this.shipsArr1[0];
         this.chooseShip = Math.floor(Math.random() * 10);
         //setting their properties
+
+
+        //enemy shooting
         setInterval(() => {
             this.chooseShip = Math.floor(Math.random() * 10);
             console.log(this.chooseShip)
@@ -133,8 +136,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         this.enemyProjectiles = this.add.group();
 
-        this.physics.add.collider(this.projectiles, this.powerUps, function(projectile, powerUp) {
+        this.physics.add.collider(this.projectiles, this.powerUps,this.enemyProjectiles, function(projectile, powerUp,enemyProjectiles) {
             projectile.destroy();
+            enemyProjectiles.destroy();
         });
         
         this.physics.add.overlap(this.player, this.powerUps, this.pickPowerUp, null, this);
@@ -142,6 +146,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.physics.add.overlap(this.player, this.enemies, this.hurtPlayer, null, this);
 
         this.physics.add.overlap(this.projectiles, this.enemies, this.hitEnemy, null, this);
+
+        this.physics.add.overlap(this.enemyProjectiles,this.player,this.hitPlayer,null,this);
         //Tutorial #9
 
         var graphics = this.add.graphics();
@@ -237,7 +243,6 @@ class Scene2 extends Phaser.Scene{ //Here!!
         if(this.player.alpha < 1) {
             return;
         }
-        
         var explosion = new Explosion(this, player.x, player.y);
 
         player.disableBody(true, true);
@@ -270,6 +275,13 @@ class Scene2 extends Phaser.Scene{ //Here!!
             },
             callbackScope: this
         });
+    }
+
+    hitPlayer(proj,player){
+        let explosion = new Explosion(this,player.x,player.y);
+        this.playerDied = true;
+        player.disableBody(true,true);
+        proj.destroy();
     }
 
     hitEnemy(projectile, enemy) {
@@ -387,7 +399,6 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     update() {
-        
         if(this.deadShipCount < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
