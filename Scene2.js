@@ -74,6 +74,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         //enemy shooting
         this.shootInterval = setInterval(() => {
+
             try {
                 this.enemyShoot();
             } catch (error) {
@@ -112,7 +113,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         
         this.powerUps = this.physics.add.group();
 
-        var maxObjects = 4;
+        var maxObjects = 3;
         for (var i = 0; i <= maxObjects; i++) {
           var powerUp = this.physics.add.sprite(16, 16, "power-up");
           this.powerUps.add(powerUp);
@@ -477,6 +478,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         } //end level if()
         else{
+            clearInterval(this.shootInterval);
+            this.scene.stop();
             this.scene.start("endGame");
             
         }
@@ -524,6 +527,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     enemyShoot(){
+        //checks for ships that are on the screen
         this.availableShip = [];
         for(let i = 0; i < this.shipsArr1.length; i++){
             if(this.shipsArr1[i].y >= 1000){
@@ -559,7 +563,6 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     resetShipPos(ship, shipX){
-        
         if(!this.shipGrave.includes(ship))
             this.shipGrave.push(ship);
        
