@@ -136,9 +136,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         this.enemyProjectiles = this.add.group();
 
-        this.physics.add.collider(this.projectiles, this.powerUps,this.enemyProjectiles, function(projectile, powerUp,enemyProjectiles) {
+        this.physics.add.collider(this.projectiles, this.powerUps, function(projectile, powerUp) {
             projectile.destroy();
-            enemyProjectiles.destroy();
         });
         
         this.physics.add.overlap(this.player, this.powerUps, this.pickPowerUp, null, this);
@@ -354,7 +353,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
             this.shipsArr3[i].x += (speed * this.velocity);
         }
        
-        if(this.shipsArr1[0].x >= 800){
+        if(this.shipsArr1[0].x >= 890){
             for(let i = 0; i < this.shipsArr1.length; i++){
                 this.shipsArr1[i].y += 10;
                 this.shipsArr2[i].y += 10;
@@ -372,7 +371,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
                 this.shipsArr2[i].x -= speed * this.velocity;
                 this.shipsArr3[i].x -= speed * this.velocity;
             }
-            if(this.shipsArr1[10].x <= 100){
+            if(this.shipsArr1[10].x <= 15){
                 for(let i = 0; i < this.shipsArr1.length; i++){
                     this.shipsArr1[i].y += 10;
                     this.shipsArr2[i].y += 10;
