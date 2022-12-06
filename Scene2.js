@@ -73,7 +73,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
         //enemy shooting
-        setInterval(() => {
+        this.shootInterval = setInterval(() => {
             try {
                 this.enemyShoot();
             } catch (error) {
@@ -478,6 +478,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         } //end level if()
         else{
             console.log("Game Over")
+            clearInterval(this.shootInterval);
         }
         this.movePlayerManager();
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
