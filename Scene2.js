@@ -125,7 +125,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         
         this.powerUps = this.physics.add.group();
 
-        var maxObjects = 3;
+        var maxObjects = 0;
         for (var i = 0; i <= maxObjects; i++) {
           var powerUp = this.physics.add.sprite(16, 16, "power-up");
           this.powerUps.add(powerUp);
@@ -154,7 +154,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         this.enemyProjectiles = this.add.group();
 
-        this.physics.add.collider(this.projectiles, this.powerUps, function(projectile, powerUp) {
+        this.physics.add.collider(this.projectiles, function(projectile, powerUp) {
             projectile.destroy();
         });
         
@@ -600,7 +600,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
     }
 
     destroyShip(pointer, gameObject) {
-        gameObject.setTexture("explosion");
-        gameObject.play("explode");
+        try{gameObject.setTexture("explosion");
+            gameObject.play("explode");}
+        catch{
+        }
     }
 }
