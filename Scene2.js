@@ -73,7 +73,6 @@ class Scene2 extends Phaser.Scene{ //Here!!
             this.chooseShip = Math.floor(Math.random() * 10);
             console.log(this.chooseShip)
             this.shootEnemy();
-
         }, 2000);
 
         
@@ -388,6 +387,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     update() {
+        
         if(this.deadShipCount < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
@@ -533,6 +533,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     resetShipPos(ship, shipX){
         this.deadShipCount++;
+        console.log(this.deadShipCount);
         ship.y = + 1000;
         ship.x = shipX;
         console.log(ship.y);
