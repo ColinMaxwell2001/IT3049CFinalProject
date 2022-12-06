@@ -5,10 +5,10 @@ class BeamJr extends Phaser.GameObjects.Sprite {
         var y = scene.enemy.y + 16;
 
 
-        super(scene, x, y, "beam");
+        super(scene, x, y, "enemybeam");
         scene.add.existing(this); 
  
-        this.play("beam_anim");
+        this.play("enemy_beam");
         scene.physics.world.enableBody(this);
         this.body.velocity.y = + 250;
     
