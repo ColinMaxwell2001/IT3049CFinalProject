@@ -45,6 +45,10 @@ class Scene1 extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16
         });
+        this.load.spritesheet("enemybeam","assets/images/spritesheets/enemybeam.png",{
+            frameWidth:16,
+            frameHeight:16
+        });
 
         this.load.bitmapFont("pixelFont", "assets/images/font/font.png", "assets/images/font/font.xml");
     
@@ -117,6 +121,13 @@ class Scene1 extends Phaser.Scene {
         key: "beam_anim",
         frames: this.anims.generateFrameNumbers("beam"),
         frameRate: 20,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key:"enemy_beam",
+        frames:this.anims.generateFrameNumbers("enemybeam"),
+        frameRate:20,
         repeat: -1
     });
 
