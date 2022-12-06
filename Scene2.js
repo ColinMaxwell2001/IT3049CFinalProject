@@ -66,10 +66,17 @@ class Scene2 extends Phaser.Scene{ //Here!!
             this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
             this.startingPosition += 40;
         }
-        this.enemy = this.add.sprite(config.width - this.startingPosition, 100, "ship")
+        this.enemy = this.shipsArr1[0];
+        this.chooseShip = Math.floor(Math.random() * 10);
         //setting their properties
+        setInterval(() => {
+            this.chooseShip = Math.floor(Math.random() * 10);
+            console.log(this.chooseShip)
+            this.shootEnemy();
 
+        }, 2000);
 
+        
         this.shipsArr1.forEach(element => {
             element.play("ship1_anim");
             this.enemies.add(element);
@@ -423,7 +430,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
                     this.shipsArr3.push(this.ship3 = this.add.sprite(config.width / 2 - this.startingPosition, config.height / 2.5, "ship3"));
                     this.startingPosition += 40;
                 }
-                
+                console.log(this.shipsArr1);
                 //setting their animations
                 this.shipsArr1.forEach(element => {
                     element.play("ship1_anim");
@@ -454,10 +461,6 @@ class Scene2 extends Phaser.Scene{ //Here!!
         else{
             console.log("Game Over")
         }
-
-        this.shootEnemy();
-        this.background.tilePositionY -= 0.5;
-
         this.movePlayerManager();
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
             if(this.player.active && !this.playerShootTime){
@@ -502,7 +505,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
 
     shootEnemy(){
+
         let newBeam = new BeamJr(this);
+        this.enemy = this.shipsArr1[this.chooseShip];
+        console.log(this.chooseShip);
     }
 
     movePlayerManager(){
@@ -527,9 +533,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     resetShipPos(ship, shipX){
         this.deadShipCount++;
-        ship.y = -500;
+        ship.y = + 1000;
         ship.x = shipX;
-
+        console.log(ship.y);
     }
 
     destroyShip(pointer, gameObject) {
