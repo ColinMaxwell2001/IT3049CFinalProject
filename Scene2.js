@@ -73,9 +73,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         //enemy shooting
         setInterval(() => {
-            this.chooseShip = Math.floor(Math.random() * 10);
-            console.log(this.chooseShip)
-            this.shootEnemy();
+            this.enemyShoot();
         }, 2000);
 
         
@@ -514,11 +512,19 @@ class Scene2 extends Phaser.Scene{ //Here!!
     }
 
 
-    shootEnemy(){
-
+    enemyShoot(){
+        this.availableShip = [];
+        for(let i = 0; i < this.shipsArr1.length; i++){
+            if(this.shipsArr1[i].y >= 1000){
+                continue;
+            }
+            else{
+                this.availableShip.push(this.shipsArr1[i]);
+            }
+        }
+        
         let newBeam = new BeamJr(this);
-        this.enemy = this.shipsArr1[this.chooseShip];
-        console.log(this.chooseShip);
+        this.enemy = this.availableShip[Math.floor(Math.random()*this.availableShip.length)];
     }
 
     movePlayerManager(){
