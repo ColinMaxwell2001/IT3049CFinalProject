@@ -8,7 +8,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         //this.background = this.add.image(0, 0,"background");
         this.background = this.add.tileSprite(0, 0, config.width, config.height, "background");
         this.background.setOrigin(0,0);
-        this.velocity = 1
+        this.velocity = .5
         this.playerDied = false;
         this.fullScreen = this.add.text(780, 20, 'Full Screen', { fill: '#0f0'})
          .setInteractive()
@@ -83,8 +83,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.chooseShip = Math.floor(Math.random() * 10);
         //setting their properties
 
-
+        this.enemyFireRate = 2000;
         //enemy shooting
+        clearInterval(this.shootInterval);
         this.shootInterval = setInterval(() => {
 
             try {
@@ -94,8 +95,25 @@ class Scene2 extends Phaser.Scene{ //Here!!
                     
                 }, 2000);
             }
-        }, 2000);
+        }, this.enemyFireRate);
 
+
+        this.spawnPowerUp = setInterval(() => {
+            var powerUp = this.physics.add.sprite(16, 16, "power-up");
+          this.powerUps.add(powerUp);
+          powerUp.setRandomPosition(0, 0, config.width, config.height);     /* Had to take out the keyword "game" in game.config in order to make work */
+
+            if (Math.random() > 0.5)
+            {
+                powerUp.play("red");
+            } else {
+                powerUp.play("gray");
+            }
+
+            powerUp.setVelocity(100, 100);
+            powerUp.setCollideWorldBounds(true);
+            powerUp.setBounce(1);
+        }, 20000);
         
         this.shipsArr1.forEach(element => {
             element.play("ship1_anim");
@@ -120,28 +138,24 @@ class Scene2 extends Phaser.Scene{ //Here!!
         // this.ship3.setInteractive();
 
         this.input.on('gameobjectdown', this.destroyShip, this);
-
-        
+        this.fireInterval = 700;
         
         this.powerUps = this.physics.add.group();
 
         var maxObjects = 0;
-        for (var i = 0; i <= maxObjects; i++) {
+        
           var powerUp = this.physics.add.sprite(16, 16, "power-up");
           this.powerUps.add(powerUp);
           powerUp.setRandomPosition(0, 0, config.width, config.height);     /* Had to take out the keyword "game" in game.config in order to make work */
-
             if (Math.random() > 0.5)
             {
                 powerUp.play("red");
             } else {
                 powerUp.play("gray");
             }
-
             powerUp.setVelocity(100, 100);
             powerUp.setCollideWorldBounds(true);
             powerUp.setBounce(1);
-        }
 
         this.player = this.physics.add.sprite(config.width / 2 - 8, config.height - 64, "player");
         this.player.play("thrust");
@@ -215,7 +229,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
     pickPowerUp(player, powerUp) {
         
         //var randNum = Math.random();
-        this.randNum = Math.random();
+        this.randNum = .77;
         console.log(this.randNum);
         /* Double Points */
         if (this.randNum <= .25)
@@ -252,7 +266,11 @@ class Scene2 extends Phaser.Scene{ //Here!!
         }
         else if (this.randNum > .75 && this.randNum <= 1)
         {
-            //Rapid Fire
+            this.fireInterval = 300
+
+            setTimeout(() => {
+                this.fireInterval = 1000;
+            }, 5000);
         }
 
         powerUp.disableBody(true, true);
@@ -382,7 +400,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
                 this.shipsArr3[i].y += 10;
 
             }
-            this.velocity += .2;
+            this.velocity += .05;
             this.shipDirection = false;
             
         }
@@ -400,7 +418,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
                     this.shipsArr3[i].y += 10;
     
                 }
-                this.velocity += .2
+                this.velocity += .05;
                 this.shipDirection = true;
                 
             }
@@ -426,7 +444,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
     
     //increase enemy fire rate
     //increase enemy speed
-    this.velocity = this.velocity + 1.2;
+    this.velocity = this.velocity + .1;
 
     //reset deadShipCount
     this.shipGrave = []
@@ -445,7 +463,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.shipsArr2 = [];
         this.shipsArr3 = [];
         this.startingPosition = 0;
-    
+        
         //creating ships
         for(let i = 0; i < 11; i++){
             this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3.8, "ship"));
@@ -467,24 +485,22 @@ class Scene2 extends Phaser.Scene{ //Here!!
             element.play("ship3_anim");
             this.enemies.add(element);
         })
+        this.enemyFireRate -=300;
+        this.fireInterval -= 50;
         this.randNum = Math.random();
         var maxObjects = 0;
-        for (var i = 0; i <= maxObjects; i++) {
           var powerUp = this.physics.add.sprite(16, 16, "power-up");
           this.powerUps.add(powerUp);
           powerUp.setRandomPosition(0, 0, config.width, config.height);     /* Had to take out the keyword "game" in game.config in order to make work */
-
             if (Math.random() > 0.5)
             {
                 powerUp.play("red");
             } else {
                 powerUp.play("gray");
             }
-
             powerUp.setVelocity(100, 100);
             powerUp.setCollideWorldBounds(true);
             powerUp.setBounce(1);
-        }
 
 
         this.input.on('gameobjectdown', this.destroyShip, this);
@@ -513,9 +529,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         } //end level if()
         else{
-            clearInterval(this.shootInterval);
             setTimeout(() => {
                 this.scene.stop();
+                console.log(this.score);
             this.scene.start("endGame");
             }, 500);
             
@@ -535,7 +551,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
                 this.playerShootTime = true;
                 setTimeout(()=>{
                     this.playerShootTime = false;
-                },100) //100 for testing purposes, change back later **
+                },this.fireInterval) //100 for testing purposes, change back later **
                 
             }
         }
