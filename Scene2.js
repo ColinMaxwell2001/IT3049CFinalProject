@@ -477,8 +477,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         } //end level if()
         else{
-            console.log("Game Over")
-            clearInterval(this.shootInterval);
+            this.scene.start("endGame");
+            
         }
         this.movePlayerManager();
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
