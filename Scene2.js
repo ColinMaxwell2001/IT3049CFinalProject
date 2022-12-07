@@ -228,12 +228,18 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     pickPowerUp(player, powerUp) {
         
-        //var randNum = Math.random();
-        this.randNum = .77;
+        this.randNum = Math.random();
+        //this.randNum = .56;
         console.log(this.randNum);
         /* Double Points */
         if (this.randNum <= .25)
         {
+            this.powerUpIdentifier = this.add.bitmapText(400, 500, 'pixelFont', 'Score Bonus!', 40);
+
+            //Display Powerup for 1.5 seconds
+            setTimeout(() => {
+                this.powerUpIdentifier.text = "";
+            }, 1500);
             //Sets new multiplier to 25
             this.scoreMultiplier = 25;
 
@@ -245,6 +251,14 @@ class Scene2 extends Phaser.Scene{ //Here!!
         }
         else if (this.randNum > .25 && this.randNum <= .5)
         {
+
+            this.powerUpIdentifier = this.add.bitmapText(400, 500, 'pixelFont', 'Dual Laser!', 40);
+
+            //Display Powerup for 1.5 seconds
+            setTimeout(() => {
+                this.powerUpIdentifier.text = "";
+            }, 1500);
+
             //Double laser
             this.doubleshot = true;
             setTimeout(() => {
@@ -255,6 +269,14 @@ class Scene2 extends Phaser.Scene{ //Here!!
         }
         else if (this.randNum > .5 && this.randNum <= .75)
         {
+
+            this.powerUpIdentifier = this.add.bitmapText(350, 500, 'pixelFont', 'Shoot Through Ships!', 40);
+            
+            //Display Powerup for 1.5 seconds
+            setTimeout(() => {
+                this.powerUpIdentifier.text = "";
+            }, 1500);
+
             this.projectilesShot = 0;
 
             this.enemiesHit = 0;
@@ -266,6 +288,15 @@ class Scene2 extends Phaser.Scene{ //Here!!
         }
         else if (this.randNum > .75 && this.randNum <= 1)
         {
+            //Rapid Fire
+
+            this.powerUpIdentifier = this.add.bitmapText(400, 500, 'pixelFont', 'Rapid Fire!', 40);
+
+            //Display Powerup for 1.5 seconds
+            setTimeout(() => {
+                this.powerUpIdentifier.text = ""; //Remove Display
+            }, 1500);
+
             this.fireInterval = 300
 
             setTimeout(() => {
