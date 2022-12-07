@@ -563,7 +563,11 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     update() {
 <<<<<<< HEAD
+<<<<<<< HEAD
         console.log(this.projectilesShot);
+=======
+        this.bonusship.x-=1.5;
+>>>>>>> 8e53b7c9f96e31ab7a3744b5ca2c429f014bc5af
 =======
         this.bonusship.x-=1.5;
 >>>>>>> 8e53b7c9f96e31ab7a3744b5ca2c429f014bc5af
