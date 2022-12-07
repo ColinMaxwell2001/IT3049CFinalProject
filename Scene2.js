@@ -72,8 +72,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.shipsArr3 = [];
         this.startingPosition = 0;
         this.shipGrave = [];
-        this.bonusship = this.add.sprite(config.width-100,config.height-600,"bonusship");
-        this.enemies.add(this.bonusship);
+
         //creating ships
         for(let i = 0; i < 11; i++){
             this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3.8, "ship"));
@@ -115,7 +114,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
             powerUp.setVelocity(100, 100);
             powerUp.setCollideWorldBounds(true);
             powerUp.setBounce(1);
-        }, 1000);
+        }, 20000);
         this.powerUpActivite = false;
         this.shipsArr1.forEach(element => {
             element.play("ship1_anim");
@@ -145,7 +144,13 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.powerUps = this.physics.add.group();
 
         var maxObjects = 0;
-        
+        this.bonusShipActive = false;
+        this.bonusShipSpawn = setInterval(() => {
+            this.bonusship = this.add.sprite(config.width-100,config.height-600,"bonusship");
+            this.enemies.add(this.bonusship);
+            this.bonusShipActive = true;
+        }, Math.floor(Math.random() * 20000) + 30000);
+
           var powerUp = this.physics.add.sprite(16, 16, "power-up");
           this.powerUps.add(powerUp);
           powerUp.setRandomPosition(0, 0, config.width, config.height);     /* Had to take out the keyword "game" in game.config in order to make work */
@@ -231,7 +236,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     pickPowerUp(player, powerUp) {
         
-        this.randNum = .6;
+        this.randNum = Math.random();
         //this.randNum = .56;
         console.log(this.randNum);
         /* Double Points */
@@ -376,9 +381,14 @@ class Scene2 extends Phaser.Scene{ //Here!!
             projectile.destroy();
     
         }
-         if(enemy===this.bonusship)
-         this.score += 100;
-         else{this.score+=this.scoreMultiplier};
+         if(enemy===this.bonusship){
+            this.score += 100;
+            this.bonusShipActive = false
+        }
+         
+         else{
+            this.score+=this.scoreMultiplier;
+        }
         
         this.resetShipPos(enemy, enemy.x);
         
@@ -562,15 +572,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
    
 
     update() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        console.log(this.projectilesShot);
-=======
-        this.bonusship.x-=1.5;
->>>>>>> 8e53b7c9f96e31ab7a3744b5ca2c429f014bc5af
-=======
-        this.bonusship.x-=1.5;
->>>>>>> 8e53b7c9f96e31ab7a3744b5ca2c429f014bc5af
+        if(this.bonusShipActive)
+            this.bonusship.x -= .75;
         if(this.shipGrave.length < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
