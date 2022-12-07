@@ -466,6 +466,12 @@ class Scene2 extends Phaser.Scene{ //Here!!
    
    //main function that updates the game
     update() {
+        if(document.hidden){
+            this.scene.pause(this);
+        }
+        if(!document.hidden){
+            this.scene.resume(this);
+        }
         if(this.bonusShipActive)
             this.bonusship.x -= .75;
         if(this.shipGrave.length < 33 && !this.playerDied){
