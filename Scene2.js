@@ -360,9 +360,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
     hitEnemy(projectile, enemy) {
         // console.log("enemies hit : " + this.enemiesHit);
         var explosion = new Explosion(this, enemy.x, enemy.y);
-        if(this.enemy.x >500 ) {
-            this.score += this.bonusscore;
-        }
+    
+        
         if(this.doublePenLaser){
             this.enemiesHit +=1;
         }
@@ -372,11 +371,15 @@ class Scene2 extends Phaser.Scene{ //Here!!
         }
         if(!this.doublePenLaser){
             projectile.destroy();
+    
         }
+         if(enemy===this.bonusship)
+         this.score += 100;
+         else{this.score+=this.scoreMultiplier};
         
         this.resetShipPos(enemy, enemy.x);
         
-        this.score += this.scoreMultiplier;
+      
         var scoreFormated = this.zeroPad(this.score, 6);
         this.scoreLabel.text = "SCORE " + scoreFormated;
     }
