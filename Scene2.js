@@ -72,6 +72,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.shipsArr3 = [];
         this.startingPosition = 0;
         this.shipGrave = [];
+        this.bonusship = this.add.sprite(config.width-100,config.height-600,"bonusship");
+        this.enemies.add(this.bonusship);
         //creating ships
         for(let i = 0; i < 11; i++){
             this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3.8, "ship"));
@@ -195,6 +197,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         this.score = 0;
         this.scoreMultiplier = 15;
+        this.bonusscore = 100;
         this.level = 0;
         this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE ", 16);
 
@@ -357,6 +360,9 @@ class Scene2 extends Phaser.Scene{ //Here!!
     hitEnemy(projectile, enemy) {
         // console.log("enemies hit : " + this.enemiesHit);
         var explosion = new Explosion(this, enemy.x, enemy.y);
+        if(this.enemy.x >500 ) {
+            this.score += this.bonusscore;
+        }
         if(this.doublePenLaser){
             this.enemiesHit +=1;
         }
@@ -550,6 +556,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
    
 
     update() {
+        this.bonusship.x-=1.5;
         if(this.shipGrave.length < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
