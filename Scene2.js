@@ -10,7 +10,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.background.setOrigin(0,0);
         this.velocity = .5
         this.playerDied = false;
-        this.fullScreen = this.add.text(780, 20, 'Full Screen', { fill: '#0f0'})
+        this.fullScreen = this.add.text(750, 20, 'Full Screen (F)', { fill: '#0f0'})
          .setInteractive()
         .on('pointerover', () => this.enterButtonHoverState() )
         .on('pointerout', () => this.enterButtonRestState() )
@@ -135,6 +135,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.player.setCollideWorldBounds(true);
 
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.f = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         this.projectiles = this.add.group();
 
 
@@ -486,6 +487,14 @@ class Scene2 extends Phaser.Scene{ //Here!!
             
         }
         this.movePlayerManager();
+        if(Phaser.Input.Keyboard.JustDown(this.f)){
+            if(document.fullscreenElement){
+                document.exitFullscreen();
+            }
+            
+        document.body.webkitRequestFullScreen();
+        }
+            
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
             if(this.player.active && !this.playerShootTime){
                 if(this.doubleshot){
