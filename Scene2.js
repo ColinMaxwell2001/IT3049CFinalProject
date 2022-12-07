@@ -72,6 +72,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
         this.shipsArr3 = [];
         this.startingPosition = 0;
         this.shipGrave = [];
+        this.bonusship = this.add.sprite(config.width-100,config.height-600,"bonusship");
+        this.enemies.add(this.bonusship);
         //creating ships
         for(let i = 0; i < 11; i++){
             this.shipsArr1.push(this.add.sprite(config.width / 2 - this.startingPosition, config.height / 3.8, "ship"));
@@ -97,7 +99,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
             }
         }, this.enemyFireRate);
 
-
+        clearInterval(this.spawnPowerUp);
         this.spawnPowerUp = setInterval(() => {
             var powerUp = this.physics.add.sprite(16, 16, "power-up");
           this.powerUps.add(powerUp);
@@ -113,8 +115,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
             powerUp.setVelocity(100, 100);
             powerUp.setCollideWorldBounds(true);
             powerUp.setBounce(1);
-        }, 20000);
-        
+        }, 1000);
+        this.powerUpActivite = false;
         this.shipsArr1.forEach(element => {
             element.play("ship1_anim");
             this.enemies.add(element);
@@ -195,6 +197,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
         this.score = 0;
         this.scoreMultiplier = 15;
+        this.bonusscore = 100;
         this.level = 0;
         this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE ", 16);
 
@@ -228,12 +231,13 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
     pickPowerUp(player, powerUp) {
         
-        this.randNum = Math.random();
+        this.randNum = .6;
         //this.randNum = .56;
         console.log(this.randNum);
         /* Double Points */
-        if (this.randNum <= .25)
+        if (this.randNum <= .25 && !this.powerUpActivite) 
         {
+            this.powerUpActivite = true;
             this.powerUpIdentifier = this.add.bitmapText(400, 500, 'pixelFont', 'Score Bonus!', 40);
 
             //Display Powerup for 1.5 seconds
@@ -246,14 +250,14 @@ class Scene2 extends Phaser.Scene{ //Here!!
             //After 10 seconds, set this.scoreMultiplier back to 15
             setTimeout(() => {
                 this.scoreMultiplier = 15;
+                this.powerUpActivite = false
             }, 10000); // 10 seconds or 10,000 milliseconds
             
         }
-        else if (this.randNum > .25 && this.randNum <= .5)
+        else if (this.randNum > .25 && this.randNum <= .5  && !this.powerUpActivite)
         {
-
+            this.powerUpActivite = true;
             this.powerUpIdentifier = this.add.bitmapText(400, 500, 'pixelFont', 'Dual Laser!', 40);
-
             //Display Powerup for 1.5 seconds
             setTimeout(() => {
                 this.powerUpIdentifier.text = "";
@@ -263,13 +267,14 @@ class Scene2 extends Phaser.Scene{ //Here!!
             this.doubleshot = true;
             setTimeout(() => {
                 this.doubleshot = false;
+                this.powerUpActivite = false;
             }, 5000);
             
             
         }
-        else if (this.randNum > .5 && this.randNum <= .75)
+        else if (this.randNum > .5 && this.randNum <= .75  && !this.powerUpActivite)
         {
-
+            this.powerUpActivite = true;
             this.powerUpIdentifier = this.add.bitmapText(350, 500, 'pixelFont', 'Shoot Through Ships!', 40);
             
             //Display Powerup for 1.5 seconds
@@ -286,10 +291,10 @@ class Scene2 extends Phaser.Scene{ //Here!!
                         
             //laser shoots through another ship
         }
-        else if (this.randNum > .75 && this.randNum <= 1)
+        else if (this.randNum > .75 && this.randNum <= 1  && !this.powerUpActivite)
         {
             //Rapid Fire
-
+            this.powerUpActivite = true;
             this.powerUpIdentifier = this.add.bitmapText(400, 500, 'pixelFont', 'Rapid Fire!', 40);
 
             //Display Powerup for 1.5 seconds
@@ -301,6 +306,7 @@ class Scene2 extends Phaser.Scene{ //Here!!
 
             setTimeout(() => {
                 this.fireInterval = 1000;
+                this.powerUpActivite = false;
             }, 5000);
         }
 
@@ -357,6 +363,8 @@ class Scene2 extends Phaser.Scene{ //Here!!
     hitEnemy(projectile, enemy) {
         // console.log("enemies hit : " + this.enemiesHit);
         var explosion = new Explosion(this, enemy.x, enemy.y);
+    
+        
         if(this.doublePenLaser){
             this.enemiesHit +=1;
         }
@@ -366,11 +374,15 @@ class Scene2 extends Phaser.Scene{ //Here!!
         }
         if(!this.doublePenLaser){
             projectile.destroy();
+    
         }
+         if(enemy===this.bonusship)
+         this.score += 100;
+         else{this.score+=this.scoreMultiplier};
         
         this.resetShipPos(enemy, enemy.x);
         
-        this.score += this.scoreMultiplier;
+      
         var scoreFormated = this.zeroPad(this.score, 6);
         this.scoreLabel.text = "SCORE " + scoreFormated;
     }
@@ -550,6 +562,11 @@ class Scene2 extends Phaser.Scene{ //Here!!
    
 
     update() {
+<<<<<<< HEAD
+        console.log(this.projectilesShot);
+=======
+        this.bonusship.x-=1.5;
+>>>>>>> 8e53b7c9f96e31ab7a3744b5ca2c429f014bc5af
         if(this.shipGrave.length < 33 && !this.playerDied){
             this.moveAllShips(.3);
         }
@@ -596,12 +613,13 @@ class Scene2 extends Phaser.Scene{ //Here!!
     shootBeam(){
        // var beam = this.physics.add.sprite(this.player.x, this.player.y, "beam");
        this.playerShootTime = false;
+       if(this.doublePenLaser){
+        this.projectilesShot += 1;
+    }
        if(this.projectilesShot >= 3){
+        this.powerUpActivite = false
         this.doublePenLaser = false;
     }
-        if(this.doublePenLaser){
-            this.projectilesShot += 1;
-        }
         // console.log("projectiles shot : " + this.projectilesShot);
         // console.log("double pen status : " + this.doublePenLaser);
 
